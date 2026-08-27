@@ -140,4 +140,8 @@ SQLite locally, Docker.
 `react-beautiful-dnd` — archived, no real React 18+ support), React Router.
 
 **CI:** GitHub Actions (`.github/workflows/ci.yml`) runs the backend PHPUnit suite and a
-frontend typecheck/lint/build on every push and PR.
+frontend typecheck/lint/build on every push and PR. On a successful push to `main`, a final job
+also notifies [the portfolio site](https://github.com/ftocheri/ftocheri.github.io) to rebuild —
+`portfolio.json` at this repo's root is the single source of truth for this project's
+pitch/description/tech/highlights there, so editing it here is how the portfolio entry updates
+going forward.

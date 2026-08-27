@@ -1,0 +1,26 @@
+{
+  "name": "Throughline",
+  "pitch": "A decoupled Laravel API + React SPA for scheduling production work orders.",
+  "description": "A production-scheduling Kanban board, built the opposite shape from GreenStock on purpose: an API-only Laravel backend (no Blade, no Inertia) consumed by a fully separate React + TypeScript SPA, deployed to two different platforms and talking cross-origin over a bearer token.",
+  "tech": ["Laravel", "PHP", "React", "TypeScript", "PostgreSQL", "TanStack Query", "Docker"],
+  "repoUrl": "https://github.com/ftocheri/throughline",
+  "liveUrl": "https://throughline-seven-theta.vercel.app",
+  "highlights": [
+    {
+      "title": "Server-authoritative drag-and-drop",
+      "body": "A dropped card sends the two cards it landed between, never a position it computed itself. The server re-reads real positions inside a transaction, computes the midpoint, and rebalances the whole column if repeated same-spot drops have halved the gap too many times to represent distinctly — so two racing tabs can never corrupt the ordering."
+    },
+    {
+      "title": "An audit trail, the second time on purpose",
+      "body": "The same append-only-ledger philosophy as GreenStock's inventory_movements, applied to workflow instead of stock: every real stage change, line reassignment, or priority edit is logged. A same-column drag reorder deliberately isn't — a row saying \"position moved from 1500 to 1499.9\" has no audit value, so it's excluded on purpose rather than by omission."
+    },
+    {
+      "title": "A genuinely decoupled architecture",
+      "body": "The API (Render) and the SPA (Vercel) know nothing about each other beyond a base URL and a CORS allow-list — no shared cookie, no shared session. Auth is a bearer token, which sidesteps Sanctum's SPA-cookie-mode configuration entirely since there's no same-site relationship to maintain."
+    },
+    {
+      "title": "CI from day one",
+      "body": "GitHub Actions runs the backend PHPUnit suite plus a frontend typecheck/lint/build on every push — this project's first CI pipeline, later extended to GreenStock too. A separate job also notifies this portfolio site to rebuild whenever either project's description changes here."
+    }
+  ]
+}
