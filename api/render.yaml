@@ -1,0 +1,36 @@
+services:
+  - type: web
+    name: throughline-api
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    envVars:
+      - key: APP_NAME
+        value: Throughline
+      - key: APP_ENV
+        value: production
+      - key: APP_DEBUG
+        value: "false"
+      - key: APP_KEY
+        sync: false
+      - key: APP_URL
+        sync: false
+      - key: DB_CONNECTION
+        value: pgsql
+      - key: DB_URL
+        sync: false
+      # No cookie/session auth in this app (Sanctum token mode only) — 'array' avoids
+      # depending on a sessions table this API-only skeleton never migrates.
+      - key: SESSION_DRIVER
+        value: array
+      - key: CACHE_STORE
+        value: database
+      - key: QUEUE_CONNECTION
+        value: sync
+      # The deployed Vercel URL for the React SPA — set once it's known.
+      - key: CORS_ALLOWED_ORIGINS
+        sync: false
+      - key: DEMO_EMAIL
+        sync: false
+      - key: DEMO_PASSWORD
+        sync: false
