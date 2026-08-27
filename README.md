@@ -98,20 +98,32 @@ Postgres database. The SPA is a static build on [Vercel](https://vercel.com).
 1. Create a free Neon project and copy its **direct** (non-pooled — no `-pooler` in the
    hostname) connection string. The pooled endpoint runs PgBouncer in transaction-pooling
    mode, which doesn't handle the multi-statement DDL that migrations run.
-2. Create a new Web Service from this repo on Render, root directory `api/` — it picks up
-   `api/Dockerfile` automatically, or apply `api/render.yaml` as a Blueprint.
+2. Create a new Web Service from this repo. A few settings matter here, confirmed the hard
+   way against Render's actual UI:
+   - **Runtime**: explicitly select **Docker** — don't trust auto-detect. Picking the wrong
+     one silently creates the service against a different buildpack entirely (this repo once
+     got auto-detected as Elixir/Phoenix and tried to run `mix phx.digest`, which obviously
+     doesn't exist here). Render doesn't let you change the runtime after creation — if this
+     happens, delete the service and recreate it.
+   - **Root Directory**: `api` (sets the Docker build context).
+   - **Dockerfile Path**: `api/Dockerfile` — this field is resolved from the **repo root**,
+     not from Root Directory, so it needs the full path even though Root Directory is already
+     `api`.
+   - **Start Command**: Render's form may mark this required even for a Docker runtime.
+     `Dockerfile` has no `CMD`, only an `ENTRYPOINT` — so set this to
+     `/usr/local/bin/docker-entrypoint.sh` to explicitly re-invoke the same script the
+     `ENTRYPOINT` would run anyway. Behavior is identical either way.
 3. Set env vars: `DB_CONNECTION=pgsql`, `DB_URL` = the Neon direct connection string,
    `APP_KEY` (generate locally with `php artisan key:generate --show`), `APP_URL`,
    `APP_ENV=production`, `APP_DEBUG=false`, `CORS_ALLOWED_ORIGINS` = the Vercel URL (once
    known), `DEMO_EMAIL` / `DEMO_PASSWORD`.
-4. After the first deploy, open Render's Shell tab once and run:
-   ```bash
-   php artisan db:seed --force
-   php artisan demo:ensure
-   ```
-   Both are one-time — `docker-entrypoint.sh` runs `php artisan migrate --force` on every boot
-   (safe/idempotent) but deliberately doesn't seed automatically, since the seeder isn't
-   idempotent and this app has no persistent disk (a free-tier container can restart often).
+4. That's it — no manual seeding step. Unlike GreenStock (which assumes a paid plan with Shell
+   access to run `db:seed` once by hand), Render's **free** tier has no Shell at all, so
+   first-boot data provisions itself: `docker-entrypoint.sh` runs `php artisan migrate --force`
+   on every boot (safe/idempotent), then `php artisan demo:seed-once` (seeds the board only if
+   it's empty — safe to run on every boot, including every free-tier wake-from-sleep restart,
+   without appending duplicate data), then `php artisan demo:ensure` (idempotently upserts the
+   one demo login from `DEMO_EMAIL`/`DEMO_PASSWORD`).
 
 **SPA (Vercel):**
 1. Import this repo into Vercel, set the project root to `web/`. Vercel auto-detects Vite.
