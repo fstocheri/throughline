@@ -1,6 +1,6 @@
 {
     "$schema": "https://getcomposer.org/schema.json",
-    "name": "ftocheri/throughline-api",
+    "name": "fstocheri/throughline-api",
     "type": "project",
     "description": "Throughline's Laravel API backend — production-scheduling work orders, consumed by a separate React SPA.",
     "keywords": ["laravel", "framework"],

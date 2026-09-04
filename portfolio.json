@@ -3,7 +3,7 @@
   "pitch": "A decoupled Laravel API + React SPA for scheduling production work orders, queued to done.",
   "description": "A production-scheduling Kanban board, built the opposite shape from GreenStock on purpose: an API-only Laravel backend (no Blade, no Inertia) consumed by a fully separate React + TypeScript SPA, deployed to two different platforms and talking cross-origin over a bearer token.",
   "tech": ["Laravel", "PHP", "React", "TypeScript", "PostgreSQL", "TanStack Query", "Docker"],
-  "repoUrl": "https://github.com/ftocheri/throughline",
+  "repoUrl": "https://github.com/fstocheri/throughline",
   "liveUrl": "https://throughline-seven-theta.vercel.app",
   "highlights": [
     {

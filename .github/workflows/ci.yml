@@ -76,5 +76,5 @@ jobs:
           curl -f -X POST \
             -H "Authorization: token ${{ secrets.PORTFOLIO_DISPATCH_TOKEN }}" \
             -H "Accept: application/vnd.github.v3+json" \
-            https://api.github.com/repos/ftocheri/ftocheri.github.io/actions/workflows/deploy.yml/dispatches \
+            https://api.github.com/repos/fstocheri/fstocheri.github.io/actions/workflows/deploy.yml/dispatches \
             -d '{"ref":"main"}'
